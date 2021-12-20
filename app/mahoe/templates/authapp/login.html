@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load bootstrap4 %}
+{% block title %} - Entrar{% endblock title %}
+
+{% block content %}
+<div class="">
+    <div style="text-align: center;">
+        <h1>Entrar</h1>
+        {% if form.errors %}
+        <p>
+            Usuário e/ou senha inválidos
+        </p>
+        {% endif %}
+    </div>
+
+    <form action="" method="post" class="form">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% buttons %}
+        <input type="hidden" name="next" value="{{ next }}" />
+        <button type="submit" class="btn btn-primary">Entrar</button>
+        {% endbuttons %}
+    </form>
+</div>
+{% endblock content %}

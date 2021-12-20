@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Bem-vindo {{ new_user.name }}!</h1>
+<p>Cadastro realizado com sucesso. Clique <a href="{% url 'mahoe:login' %}">aqui</a> para realizar o login.</p>
+{% endblock content %}
