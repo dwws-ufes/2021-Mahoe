@@ -2,13 +2,17 @@ from django.http import request
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegistration, UserEditForm
-
-
-# Create your views here.
-
+import urllib.request
+import json
 
 def home(request):
-    return render(request, 'home.html')
+    # Grab Crypto Price Data
+    price_request = urllib.request.urlopen("https://min-api.cryptocompare.com/data/pricemultifull?fsyms=BTC,ETH,XRP,BCH,EOS,LTC,XLM,ADA,USDT,MIOTA,TRX&tsyms=BRL")
+    price = json.load(price_request)
+    # Grab Crypto News
+    api_request = urllib.request.urlopen("https://min-api.cryptocompare.com/data/v2/news/?lang=PT")
+    api = json.load(api_request)
+    return render(request, 'home.html', {'api': api, 'price': price})
 
 @login_required
 def dashboard(request):

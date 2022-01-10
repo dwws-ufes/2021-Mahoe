@@ -14,10 +14,10 @@ urlpatterns = [
     path('edit/', edit, name='edit'),
     path('dashboard/', dashboard, name='dashboard'),
     path('', home, name='home'),
-    path('login/', LoginView.as_view(template_name='mahoe/login.html'), name='login'),
-    path('logout/', LogoutView.as_view(template_name='mahoe/logged_out.html'), name='logout'),
+    path('login/', LoginView.as_view(template_name='mahoe/templates/authapp/login.html'), name='login'),
+    path('logout/', LogoutView.as_view(template_name='mahoe/templates/authapp/logged_out.html'), name='logout'),
     path('password_change/', PasswordChangeView.as_view(
-        template_name='mahoe/password_change_form.html'), name='password_change'),
-    path('password_change/done/', PasswordChangeDoneView.as_view(template_name='mahoe/password_change_done.html'),
+        template_name='mahoe/templates/authapp/password_change_form.html'), name='password_change'),
+    path('password_change/done/', PasswordChangeDoneView.as_view(template_name='mahoe/templates/authapp/password_change_done.html'),
          name='password_change_done'),
 ]
