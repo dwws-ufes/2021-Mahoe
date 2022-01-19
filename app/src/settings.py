@@ -134,5 +134,7 @@ LOGIN_REDIRECT_URL = 'mahoe:dashboard'
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 
+# AUTH_USER_MODEL= 'mahoe.User'
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
