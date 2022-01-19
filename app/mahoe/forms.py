@@ -1,12 +1,10 @@
 from django.contrib.auth.models import User
 from django import forms
-# from .models import Profile
-from django.contrib.auth.forms import AuthenticationForm, UsernameField
-from .models import UserRegistrationModel
-from django.contrib.auth.forms import PasswordResetForm
+from django.contrib.auth import get_user_model
 
+User = get_user_model()
 
-class UserRegistration(forms.ModelForm):
+class RegisterForm(forms.ModelForm):
     username = forms.CharField(label='Usuário', widget=forms.TextInput)
     first_name = forms.CharField(label='Nome', widget=forms.TextInput)
     last_name = forms.CharField(label='Sobrenome', widget=forms.TextInput)
@@ -19,12 +17,27 @@ class UserRegistration(forms.ModelForm):
         model = User
         fields = ('username', 'first_name', 'last_name', 'email')
 
-        def clean_password2(self):
-            cd = self.cleaned_data
-            if cd['password'] != cd['password2']:
-                raise forms.ValidationError('Passwords don\'t match.')
-            return cd['password2']
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        qs = User.objects.filter(email=email)
+        if qs.exists():
+            raise forms.ValidationError("email is taken")
+        return email
+    
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        qs = User.objects.filter(username=username)
+        if qs.exists():
+            raise forms.ValidationError("username is taken")
+        return username
 
+    def clean_password2(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get("password")
+        password2 = cleaned_data.get("password2")
+        if password is not None and password != password2:
+            self.add_error("password22", "Your passwords must match")
+        return cleaned_data
 
 class UserEditForm(forms.ModelForm):
     class Meta:
