@@ -4,18 +4,33 @@ from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser
 )
 
+class Wallet(models.Model):
+    moneyAmount = models.FloatField(default=200.00)
+
+class PurchaseHistory(models.Model):
+    purchase_price = models.FloatField()
+    date = models.DateTimeField()
+    amount = models.FloatField()
+    spendedCash = models.FloatField()
+    code = models.CharField(max_length=5)
+    name = models.CharField(max_length=25)
+    wallet = models.ForeignKey(to=Wallet, on_delete=models.CASCADE)
+
+class OwnedCoin(models.Model):
+    code = models.CharField(max_length=5)
+    name = models.CharField(max_length=25)
+    amount = models.FloatField()
+    purchase_price = models.FloatField()
+    wallet = models.ForeignKey(to=Wallet, on_delete=models.CASCADE)
+
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None):
-        """
-        Creates and saves a User with the given email and password.
-        """
         if not email:
             raise ValueError('Users must have an email address')
 
         user = self.model(
             email=self.normalize_email(email),
         )
-
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -40,7 +55,7 @@ class User(AbstractBaseUser):
         max_length=255,
         unique=True
     )
-    is_active = models.BooleanField(default=True)
+    wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE)
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = [first_name, last_name, username]
@@ -50,5 +65,3 @@ class User(AbstractBaseUser):
 
     def get_short_name(self):
         return self.first_name
-
-
